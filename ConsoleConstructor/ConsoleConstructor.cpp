@@ -158,7 +158,7 @@ int mech::ConsoleConstructor::consoleHandler(int argc, char* argv[])
 
 		if (findInstruction(argv[i]) > -1)
 		{
-			m_instructions[i].m_status = true;
+			m_instructions[findInstruction(argv[i])].m_status = true;
 			for (int k = i + 1; k < argc; k++) {
 				if (findInstruction(argv[k]) > -1) {
 					position = k;
@@ -179,15 +179,16 @@ int mech::ConsoleConstructor::consoleHandler(int argc, char* argv[])
 	return STATE::NORMAL;
 }
 
-std::vector<std::string> mech::ConsoleConstructor::getArguments(const std::string & instruction)
+std::vector<std::string> mech::ConsoleConstructor::getArguments(const std::string & str)
 {
-	int find = findInstruction(instruction);
-	if (find > -1) {
-		return m_instructions[find].m_arguments;
+	for (int i = 0; i < m_instructions.size(); i++) {
+		if (m_instructions[i].m_instruction == str ||
+			m_instructions[i].m_altInstruction == str ||
+			m_instructions[i].m_meaning == str) {
+			return m_instructions[i].m_arguments;
+		}
 	}
-	else {
-		return std::vector<std::string>();
-	}
+	return std::vector<std::string>();
 }
 
 bool mech::ConsoleConstructor::getStatusInstruction(const std::string & str)

@@ -47,9 +47,10 @@ namespace mech
 		static int on(const std::string& meaning, const std::string& instruction, const std::string& altInstruction, const std::string& comment = "");
 		static int on(const std::string& meaning, const std::string& instruction, const std::string& comment = "");
 
-		// str = instruction/altInstruction
-		static std::vector<std::string> getArguments(const std::string& instruction);
+		// str = instruction/altInstruction/meaning
+		static std::vector<std::string> getArguments(const std::string& str);
 
+		// str = instruction/altInstruction/meaning
 		static bool getStatusInstruction(const std::string& str);
 	private:
 		enum STATE : int {
