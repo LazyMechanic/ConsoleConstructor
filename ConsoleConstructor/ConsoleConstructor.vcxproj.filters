@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Core">
+      <UniqueIdentifier>{96fe9eca-e3e1-4fdd-a8aa-3b365929dade}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ConsoleConstructor.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ConsoleConstructor.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
