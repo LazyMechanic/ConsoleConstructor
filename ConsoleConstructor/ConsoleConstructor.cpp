@@ -190,15 +190,16 @@ std::vector<std::string> mech::ConsoleConstructor::getArguments(const std::strin
 	}
 }
 
-bool mech::ConsoleConstructor::getStatusInstruction(const std::string & instruction)
+bool mech::ConsoleConstructor::getStatusInstruction(const std::string & str)
 {
-	int find = findInstruction(instruction);
-	if (find > -1) {
-		return m_instructions[find].m_status;
+	for (int i = 0; i < m_instructions.size(); i++) {
+		if (m_instructions[i].m_instruction == str ||
+			m_instructions[i].m_altInstruction == str ||
+			m_instructions[i].m_meaning == str) {
+			return m_instructions[i].m_status;
+		}
 	}
-	else {
-		return false;
-	}
+	return false;
 }
 
 void mech::ConsoleConstructor::help(STATE state)
