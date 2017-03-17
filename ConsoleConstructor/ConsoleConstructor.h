@@ -50,7 +50,7 @@ namespace mech
 		// str = instruction/altInstruction
 		static std::vector<std::string> getArguments(const std::string& instruction);
 
-		static bool getStatusInstruction(const std::string& instruction);
+		static bool getStatusInstruction(const std::string& str);
 	private:
 		enum STATE : int {
 			NORMAL = 0,
