@@ -152,8 +152,8 @@ int mech::ConsoleConstructor::consoleHandler(int argc, char* argv[])
 	for (int i = 1; i < argc; i++) {
 		int position = argc;
 		if (std::string(argv[i]) == "-h" || std::string(argv[i]) == "--help") {
-			help(STATE::NORMAL);
-			return STATE::NORMAL;
+			help(STATE::HELP);
+			return STATE::HELP;
 		}
 
 		if (findInstruction(argv[i]) > -1)

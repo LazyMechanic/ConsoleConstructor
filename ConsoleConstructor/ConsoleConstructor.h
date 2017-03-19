@@ -55,6 +55,7 @@ namespace mech
 	private:
 		enum STATE : int {
 			NORMAL = 1,
+			HELP = 0,
 			INVALID_NUMBER = -1,
 			WRONG_ARGUMENTS = -2
 		};
