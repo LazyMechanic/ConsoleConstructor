@@ -54,9 +54,9 @@ namespace mech
 		static bool getStatusInstruction(const std::string& str);
 	private:
 		enum STATE : int {
-			NORMAL = 0,
-			INVALID_NUMBER = 1,
-			WRONG_ARGUMENTS = 2
+			NORMAL = 1,
+			INVALID_NUMBER = -1,
+			WRONG_ARGUMENTS = -2
 		};
 
 		static void help(STATE state = STATE::NORMAL);
