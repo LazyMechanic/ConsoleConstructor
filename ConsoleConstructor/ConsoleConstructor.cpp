@@ -123,7 +123,7 @@ int mech::ConsoleConstructor::on(const std::string & meaning, const std::string 
 	return 1;
 }
 
-int mech::ConsoleConstructor::on(const std::string & instruction, const std::string& meaning, const std::string& comment)
+int mech::ConsoleConstructor::on(const std::string & meaning, const std::string& instruction, const std::string& comment)
 {
 	for (int i = 0; i < m_instructions.size(); i++) {
 		if (m_instructions[i].m_instruction == instruction ||
