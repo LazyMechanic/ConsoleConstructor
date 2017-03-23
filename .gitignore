@@ -21,7 +21,7 @@
 *.lai
 *.la
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
@@ -50,7 +50,7 @@ ipch/
 *.db
 
 # Project
-bin
-bin64
+#bin
+#bin64
 log.txt
 Thumbs.db
