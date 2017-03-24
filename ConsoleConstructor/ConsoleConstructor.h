@@ -42,7 +42,7 @@ namespace mech
 	public:
 		static int consoleHandler(int argc, char* argv[]);
 
-		static void onProgramName(const std::string& name);
+		static void setProgramName(const std::string& name);
 
 		static int on(const std::string& meaning, const std::string& instruction, const std::string& altInstruction, const std::string& comment = "");
 		static int on(const std::string& meaning, const std::string& instruction, const std::string& comment = "");

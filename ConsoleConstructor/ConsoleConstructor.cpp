@@ -104,7 +104,7 @@ std::string generateComment(std::string str) {
 	return str;
 }
 
-void mech::ConsoleConstructor::onProgramName(const std::string & name)
+void mech::ConsoleConstructor::setProgramName(const std::string & name)
 {
 	m_programName = name;
 }
@@ -149,6 +149,8 @@ int mech::ConsoleConstructor::findInstruction(const std::string& instruction)
 
 int mech::ConsoleConstructor::consoleHandler(int argc, char* argv[])
 {
+	on("help", "-h", "--help", "Show this message.");
+
 	for (int i = 1; i < argc; i++) {
 		int position = argc;
 		if (std::string(argv[i]) == "-h" || std::string(argv[i]) == "--help") {
