@@ -208,7 +208,7 @@ bool mech::ConsoleConstructor::getStatusInstruction(const std::string & str)
 void mech::ConsoleConstructor::help(STATE state)
 {
 	switch (state) {
-		case STATE::NORMAL: {
+		case STATE::HELP: {
 			#ifdef _WIN32
 			SetConsoleTextAttribute(console, STATE_COLOR::NORMAL_C);
 			#endif
