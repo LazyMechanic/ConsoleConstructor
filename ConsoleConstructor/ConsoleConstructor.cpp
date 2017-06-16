@@ -32,7 +32,7 @@ enum COLOR {
 };
 enum STATE_COLOR {
 	NORMAL_C = COLOR::WHITE | COLOR::BLACK_BG,
-	INVALID_NUMBER_C = COLOR::RED | COLOR::YELLOW_BG,
+	WRONG_NUMBER_PARAMS_C = COLOR::RED | COLOR::YELLOW_BG,
 	WRONG_ARGUMENTS_C = COLOR::WHITE | COLOR::RED_BG
 };
 
@@ -109,9 +109,9 @@ void mech::ConsoleConstructor::setProgramName(const std::string & name)
 	m_programName = name;
 }
 
-int mech::ConsoleConstructor::on(const std::string & meaning, const std::string & instruction, const std::string & altInstruction, const std::string & comment)
+int mech::ConsoleConstructor::on(const std::string & meaning, const std::string & instruction, const std::string & altInstruction, int paramsCount, const std::string & comment)
 {
-	for (int i = 0; i < m_instructions.size(); i++) {
+	for (size_t i = 0; i < m_instructions.size(); i++) {
 		if (m_instructions[i].m_instruction == instruction ||
 			m_instructions[i].m_altInstruction == altInstruction ||
 			m_instructions[i].m_meaning == meaning) {
@@ -119,21 +119,31 @@ int mech::ConsoleConstructor::on(const std::string & meaning, const std::string 
 		}
 	}
 
-	m_instructions.push_back(Instruction(meaning, instruction, altInstruction, generateComment(comment)));
+	m_instructions.push_back(Instruction(meaning, instruction, altInstruction, paramsCount, generateComment(comment)));
 	return 1;
 }
 
-int mech::ConsoleConstructor::on(const std::string & meaning, const std::string& instruction, const std::string& comment)
+int mech::ConsoleConstructor::on(const std::string & meaning, const std::string & instruction, const std::string & altInstruction, const std::string & comment)
 {
-	for (int i = 0; i < m_instructions.size(); i++) {
+	return on(meaning, instruction, altInstruction, 0, comment);
+}
+
+int mech::ConsoleConstructor::on(const std::string & meaning, const std::string& instruction, int paramsCount, const std::string& comment)
+{
+	for (size_t i = 0; i < m_instructions.size(); i++) {
 		if (m_instructions[i].m_instruction == instruction ||
 			m_instructions[i].m_meaning == meaning) {
 			return -1;
 		}
 	}
 
-	m_instructions.push_back(Instruction(meaning, instruction, generateComment(comment)));
+	m_instructions.push_back(Instruction(meaning, instruction, paramsCount, generateComment(comment)));
 	return 1;
+}
+
+int mech::ConsoleConstructor::on(const std::string & meaning, const std::string & instruction, const std::string & comment)
+{
+	return on(meaning, instruction, 0, comment);
 }
 
 int mech::ConsoleConstructor::findInstruction(const std::string& instruction)
@@ -154,6 +164,7 @@ int mech::ConsoleConstructor::consoleHandler(int argc, char* argv[])
 	for (int i = 1; i < argc; i++) {
 		int position = argc;
 		if (std::string(argv[i]) == "-h" || std::string(argv[i]) == "--help") {
+			m_instructions[findInstruction(argv[i])].m_status = true;
 			help(STATE::HELP);
 			return STATE::HELP;
 		}
@@ -167,6 +178,13 @@ int mech::ConsoleConstructor::consoleHandler(int argc, char* argv[])
 					break;
 				}
 			}
+
+			if (m_instructions[findInstruction(argv[i])].m_paramsCount != mech::Count::ANY && 
+				position > m_instructions[findInstruction(argv[i])].m_paramsCount) {
+				help(STATE::WRONG_NUMBER_PARAMS);
+				return STATE::WRONG_NUMBER_PARAMS;
+			}
+
 			for (int k = i + 1; k < position; k++) {
 				m_instructions[findInstruction(argv[i])].m_arguments.push_back(argv[k]);
 			}
@@ -183,7 +201,7 @@ int mech::ConsoleConstructor::consoleHandler(int argc, char* argv[])
 
 std::vector<std::string> mech::ConsoleConstructor::getArguments(const std::string & str)
 {
-	for (int i = 0; i < m_instructions.size(); i++) {
+	for (size_t i = 0; i < m_instructions.size(); i++) {
 		if (m_instructions[i].m_instruction == str ||
 			m_instructions[i].m_altInstruction == str ||
 			m_instructions[i].m_meaning == str) {
@@ -195,7 +213,7 @@ std::vector<std::string> mech::ConsoleConstructor::getArguments(const std::strin
 
 bool mech::ConsoleConstructor::getStatusInstruction(const std::string & str)
 {
-	for (int i = 0; i < m_instructions.size(); i++) {
+	for (size_t i = 0; i < m_instructions.size(); i++) {
 		if (m_instructions[i].m_instruction == str ||
 			m_instructions[i].m_altInstruction == str ||
 			m_instructions[i].m_meaning == str) {
@@ -215,13 +233,13 @@ void mech::ConsoleConstructor::help(STATE state)
 			getHelpText();
 			break;
 		}
-		case STATE::INVALID_NUMBER:
+		case STATE::WRONG_NUMBER_PARAMS:
 			#ifdef _WIN32
-			SetConsoleTextAttribute(console, STATE_COLOR::INVALID_NUMBER_C);
-			std::cout << "\nERROR: Invalid number of arguments!\n\n";
+			SetConsoleTextAttribute(console, STATE_COLOR::WRONG_NUMBER_PARAMS_C);
+			std::cout << "\nERROR: Wrong number of params!\n\n";
 			SetConsoleTextAttribute(console, STATE_COLOR::NORMAL_C);
 			#elif __linux__
-			std::cout << RED << YELLOW_BG << "\nERROR: Invalid number of arguments!\n\n" << DEFAULT;
+			std::cout << RED << YELLOW_BG << "\nERROR: Wrong number of params!\n\n" << DEFAULT;
 			#endif
 			getHelpText();
 			break;
@@ -243,7 +261,7 @@ void mech::ConsoleConstructor::getHelpText()
 	std::cout << "ConsoleConstructor by Mechanic.\n\n" <<
 		"Usage:\n\t" << (m_programName == "" ? "YourProgramName" : m_programName) << ".exe" << " -option parametrs\n\n" <<
 		"Options:\n";
-	for (int i = 0; i < m_instructions.size(); i++) {
+	for (size_t i = 0; i < m_instructions.size(); i++) {
 		std::cout << "\t[" << m_instructions[i].m_instruction << '=' << m_instructions[i].m_meaning << "]\n";
 		std::cout << m_instructions[i].m_comment << "\n\n";
 	}

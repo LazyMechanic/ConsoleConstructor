@@ -43,14 +43,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>../bin/</OutDir>
-    <IntDir>../tmp/</IntDir>
+    <OutDir>../build/x86/</OutDir>
+    <IntDir>../tmp/x86/</IntDir>
     <TargetName>mechanic-consoleconstructor-s</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>../bin64/</OutDir>
-    <IntDir>../tmp64/</IntDir>
+    <OutDir>../build/x64/</OutDir>
+    <IntDir>../tmp/x64/</IntDir>
     <TargetName>mechanic-consoleconstructor-s</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
