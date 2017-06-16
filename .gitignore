@@ -28,10 +28,11 @@
 *.out
 *.app
 
+# Build
+
 # Visual Studio
 .vs/
-tmp
-tmp64
+tmp/
 
 # Visual C++ cache files
 ipch/
@@ -50,7 +51,6 @@ ipch/
 *.db
 
 # Project
-#bin
-#bin64
+build/
 log.txt
 Thumbs.db
