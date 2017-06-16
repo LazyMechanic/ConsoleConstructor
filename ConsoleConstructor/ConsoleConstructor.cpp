@@ -8,7 +8,7 @@ std::string mech::ConsoleConstructor::m_programName;
 #ifdef _WIN32
 #include <Windows.h>
 enum COLOR {
-	BLACK = 0,
+	BLACK = 0x0000,
 	RED = FOREGROUND_RED,
 	GREEN = FOREGROUND_GREEN,
 	BLUE = FOREGROUND_BLUE,
@@ -19,7 +19,7 @@ enum COLOR {
 
 	LIGHTER = FOREGROUND_INTENSITY,
 
-	BLACK_BG = 0,
+	BLACK_BG = 0x0000,
 	RED_BG = BACKGROUND_RED,
 	GREEN_BG = BACKGROUND_GREEN,
 	BLUE_BG = BACKGROUND_BLUE,
@@ -32,7 +32,7 @@ enum COLOR {
 };
 enum STATE_COLOR {
 	NORMAL_C = COLOR::WHITE | COLOR::BLACK_BG,
-	WRONG_NUMBER_PARAMS_C = COLOR::RED | COLOR::YELLOW_BG,
+	WRONG_NUMBER_PARAMS_C = COLOR::BLACK | COLOR::YELLOW_BG,
 	WRONG_ARGUMENTS_C = COLOR::WHITE | COLOR::RED_BG
 };
 
@@ -159,43 +159,42 @@ int mech::ConsoleConstructor::findInstruction(const std::string& instruction)
 
 int mech::ConsoleConstructor::consoleHandler(int argc, char* argv[])
 {
-	on("help", "-h", "--help", "Show this message.");
+	on("help", "-h", "--help", 0, "Show this message.");
 
 	for (int i = 1; i < argc; i++) {
-		int position = argc;
-		if (std::string(argv[i]) == "-h" || std::string(argv[i]) == "--help") {
+		int pos = i;
+		if (findInstruction(argv[i]) > -1) {
 			m_instructions[findInstruction(argv[i])].m_status = true;
-			help(STATE::HELP);
-			return STATE::HELP;
-		}
 
-		if (findInstruction(argv[i]) > -1)
-		{
-			m_instructions[findInstruction(argv[i])].m_status = true;
-			for (int k = i + 1; k < argc; k++) {
-				if (findInstruction(argv[k]) > -1) {
-					position = k;
-					break;
-				}
+			if (std::string(argv[i]) == "-h" || std::string(argv[i]) == "--help") {
+				help(STATE::HELP);
+				return STATE::HELP;
 			}
 
-			if (m_instructions[findInstruction(argv[i])].m_paramsCount != mech::Count::ANY && 
-				position > m_instructions[findInstruction(argv[i])].m_paramsCount) {
+			for (int k = i + 1; k < argc; k++) {
+				if (findInstruction(argv[k]) > -1) {
+					break;
+				}
+
+				m_instructions[findInstruction(argv[i])].m_arguments.push_back(argv[k]);
+
+				pos = k;
+			}
+
+			if (m_instructions[findInstruction(argv[i])].m_paramsCount != Count::ANY &&
+				m_instructions[findInstruction(argv[i])].m_paramsCount != m_instructions[findInstruction(argv[i])].m_arguments.size())
+			{
 				help(STATE::WRONG_NUMBER_PARAMS);
 				return STATE::WRONG_NUMBER_PARAMS;
 			}
-
-			for (int k = i + 1; k < position; k++) {
-				m_instructions[findInstruction(argv[i])].m_arguments.push_back(argv[k]);
-			}
-			i = position;
 		}
 		else {
 			help(STATE::WRONG_ARGUMENTS);
 			return STATE::WRONG_ARGUMENTS;
 		}
-	}
 
+		i = pos;
+	}
 	return STATE::NORMAL;
 }
 

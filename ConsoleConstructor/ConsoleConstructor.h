@@ -11,7 +11,7 @@ namespace mech
 		ANY = -1
 	};
 
-	class Instruction {
+	struct Instruction {
 	public:
 		Instruction(const std::string & meaning,
 			const std::string & instruction,
