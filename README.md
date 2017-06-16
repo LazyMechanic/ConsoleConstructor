@@ -1,5 +1,5 @@
 Usage:
-```
+```c++
 #include "ConsoleConstructor.h"
 
 using console = mech::ConsoleConstructor;
