@@ -51,6 +51,6 @@ ipch/
 *.db
 
 # Project
-build/
+build/*
 log.txt
 Thumbs.db
